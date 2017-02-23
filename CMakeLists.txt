@@ -17,6 +17,11 @@ endif()
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake-modules/")
 include(CreateLaunchers)
 
+# Add a compiler flag
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+
+### OpenGL
+
 find_package(OpenGL REQUIRED)
 
 include_directories(
@@ -27,12 +32,6 @@ include_directories(
     .
 )
 
-set(ALL_LIBS
-    ${OPENGL_LIBRARY}
-    glfw
-    GLEW_1130
-)
-
 add_definitions(
     -DTW_STATIC
     -DTW_NO_LIB_PRAGMA
@@ -41,9 +40,43 @@ add_definitions(
     -D_CRT_SECURE_NO_WARNINGS
 )
 
+### QT 4.8
+
+find_package(Qt4 REQUIRED QtCore QtGui QtOpenGL)
+include(${QT_USE_FILE})
+
+include_directories(${QT_INCLUDES})
+
+add_definitions(${QT_DEFINITIONS})
+
+set(QT_USE_QTOPENGL TRUE)
+
+set(ALL_LIBS
+    ${OPENGL_LIBRARY}
+    ${QT_QTCORE_LIBRARIES}
+    ${QT_QTGUI_LIBRARIES}
+    ${QT_QTOPENGL_LIBRARIES}
+    glfw
+    GLEW_1130
+)
+
+file(GLOB QT_FORMS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} src/gui/*.ui)
+file(GLOB QT_RESOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} src/gui/resources/*.qrc)
+file(GLOB_RECURSE QT_MOC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} FOLLOW_SYMLINKS src/gui/*.h)
+file(GLOB_RECURSE QT_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} FOLLOW_SYMLINKS src/gui/*.cpp)
+
+QT4_ADD_RESOURCES(QT_RESOURCES_CPP ${QT_RESOURCES})
+QT4_WRAP_UI(QT_FORMS_HPP ${QT_FORMS})
+QT4_WRAP_CPP(QT_MOC_HPP ${QT_MOC})
+
+# @TODO(xinghe): For debugging purpose.
+# message("SSSSS : ${QT_QTGUI_LIBRARIES}, ${QT_QTOPENGL_LIBRARIES}, ${QT_MOC_HPP}")
+
 # The main entry.
 add_executable(main
     src/main.cpp
+    ${QT_MOC_HPP}
+    ${QT_SOURCES}
 )
 target_link_libraries(main
     ${ALL_LIBS}
