@@ -10,7 +10,6 @@
 #include <QtGui>
 #include "camera_view_widget.h"
 #include "status_widget.h"
-#include "viewer_widget.h"
 #include "gl_widget.h"
 
 namespace monitor {
@@ -25,8 +24,6 @@ constexpr char kMonitorWindowStyle[] =
 MonitorWindow::MonitorWindow() {
     setWindowTitle(tr("AV Monitor"));
     // Set central view window.
-    // ViewerWidget* viewer_window = new ViewerWidget();
-    // setCentralWidget(viewer_window);
     GLWidget* widget = new GLWidget();
     setCentralWidget(widget);
 
