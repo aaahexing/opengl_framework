@@ -26,6 +26,9 @@ include_directories(${QT_INCLUDES})
 
 set(QT_USE_QTOPENGL TRUE)
 
+### Build the project.
+add_compile_options(--std=c++11)
+
 set(ALL_LIBS
     ${OPENGL_LIBRARY}
     ${QT_QTCORE_LIBRARIES}

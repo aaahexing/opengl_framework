@@ -1,10 +1,12 @@
-#ifndef GL_WIDGET_H_
-#define GL_WIDGET_H_
+#ifndef MONITOR_GL_WIDGET_H_
+#define MONITOR_GL_WIDGET_H_
 
 #include <QtGui>
 #include <QGLWidget>
 
 class QGLShaderProgram;
+
+namespace monitor {
 
 class GLWidget : public QGLWidget
 {
@@ -46,4 +48,6 @@ private:
 #endif
 };
 
-#endif  // GL_WIDGET_H_
+}  // namespace monitor
+
+#endif  // MONITOR_GL_WIDGET_H_
