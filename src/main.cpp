@@ -14,11 +14,11 @@ GLFWwindow* window;
 using namespace glm;
 
 #include <QApplication>
-#include "gui/monitor_window.h"
+#include "gui/gl_widget.h"
 
 int main(int argc, char** argv) {
     QApplication app(argc, argv);
-    monitor::MonitorWindow *window = new monitor::MonitorWindow();
-    window->show();
+    GLWidget *widget = new GLWidget();
+    widget->show();
     return app.exec();
 }

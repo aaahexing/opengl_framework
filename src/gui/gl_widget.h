@@ -6,8 +6,6 @@
 
 class QGLShaderProgram;
 
-namespace monitor {
-
 class GLWidget : public QGLWidget
 {
     Q_OBJECT
@@ -47,7 +45,5 @@ private:
     QGLShaderProgram *program;
 #endif
 };
-
-}  // namespace monitor
 
 #endif  // MONITOR_GL_WIDGET_H_

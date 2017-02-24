@@ -6,8 +6,6 @@
 
 #include <unistd.h>
 
-namespace monitor {
-
 GLWidget::GLWidget(QWidget *parent, QGLWidget *shareWidget)
     : QGLWidget(parent, shareWidget) {
     clearColor = Qt::black;
@@ -195,5 +193,3 @@ void GLWidget::makeObject() {
         }
     }
 }
-
-}  // namespace monitor
