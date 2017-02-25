@@ -49,4 +49,5 @@ add_subdirectory(third_party)
 add_subdirectory(src)
 
 # Create the launcher file for the main entry-point.
-create_target_launcher(main WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+create_target_launcher(main WORKING_DIRECTORY "${CMAKE_BINARY_DIR}")
+
