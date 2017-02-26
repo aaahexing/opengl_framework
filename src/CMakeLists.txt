@@ -29,7 +29,7 @@ set(QT_USE_QTOPENGL TRUE)
 ### Build the project.
 add_compile_options(--std=c++11)
 
-set(ALL_LIBS
+set(EXTERNAL_LIBS
     ${OPENGL_LIBRARY}
     ${QT_QTCORE_LIBRARIES}
     ${QT_QTGUI_LIBRARIES}
@@ -38,26 +38,24 @@ set(ALL_LIBS
     GLEW_1130
 )
 
-file(GLOB QT_FORMS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} gui/*.ui)
-file(GLOB QT_RESOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} gui/resources/*.qrc)
-file(GLOB_RECURSE QT_MOC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} FOLLOW_SYMLINKS gui/*.h)
-file(GLOB_RECURSE QT_SOURCES RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} FOLLOW_SYMLINKS gui/*.cpp)
-
-QT4_ADD_RESOURCES(QT_RESOURCES_CPP ${QT_RESOURCES})
-QT4_WRAP_UI(QT_FORMS_HPP ${QT_FORMS})
-QT4_WRAP_CPP(QT_MOC_HPP ${QT_MOC})
-
 # @TODO(xinghe): For debugging purpose.
 # message("SSSSS : ${QT_QTGUI_LIBRARIES}, ${QT_QTOPENGL_LIBRARIES}, ${QT_MOC_HPP}")
+
+add_subdirectory(core)
+add_subdirectory(gui)
+# Build the plugins
+add_subdirectory(plugins)
 
 # The main entry.
 add_executable(main
     main.cpp
-    ${QT_MOC_HPP}
-    ${QT_SOURCES}
 )
+# @TODO(xinghe): the order below is important? It will fail to build if
+# put the ${EXTERNAL_LIBS} ahead...
 target_link_libraries(main
-    ${ALL_LIBS}
+    core
+    gui
+    ${EXTERNAL_LIBS}
 )
 set_target_properties(main
     PROPERTIES
@@ -65,28 +63,6 @@ set_target_properties(main
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
 )
-
-file(GLOB_RECURSE PLUGINS_HEADERS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} FOLLOW_SYMLINKS plugins/*.h)
-
-# Generate "$lib{plugin_name}.so" for each pair of source file.
-foreach(plugin_h ${PLUGINS_HEADERS})
-    get_filename_component (plugin_name ${plugin_h} NAME_WE)
-    get_filename_component (plugin_path ${plugin_h} PATH)
-    QT4_WRAP_CPP(${plugin_name}_WRAPED_HEADER ${plugin_h})
-    set(plugin_cpp "${plugin_path}/${plugin_name}.cpp")
-    add_library(${plugin_name}
-        SHARED
-        ${plugin_path}/${plugin_name}.cpp
-        ${${plugin_name}_WRAPED_HEADER})
-    target_link_libraries(${plugin_name} ${ALL_LIBS})
-    set_target_properties(${plugin_name}
-        PROPERTIES
-        ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/plugins"
-        LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/plugins"
-        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/plugins"
-    )
-    # message("${plugin_name}, ${plugin_h}, ${plugin_cpp}, ${${plugin_name}_WRAPED_HEADER}")
-endforeach()
 
 # SOURCE_GROUP(common REGULAR_EXPRESSION ".*/common/.*" )
 # SOURCE_GROUP(shaders REGULAR_EXPRESSION ".*/.*shader$" )

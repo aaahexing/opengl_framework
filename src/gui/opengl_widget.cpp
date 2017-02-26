@@ -1,4 +1,4 @@
-#include "gl_widget.h"
+#include "opengl_widget.h"
 
 #include <QGLWidget>
 #include <QtGui>

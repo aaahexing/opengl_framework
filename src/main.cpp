@@ -14,10 +14,11 @@ GLFWwindow* window;
 using namespace glm;
 
 #include <QApplication>
-#include "gui/gl_widget.h"
+#include "gui/opengl_widget.h"
 #include "gui/monitor_window.h"
+#include "gui/status_widget.h"
 
-#include "gui/textartdialog.h"
+#include "core/textartdialog.h"
 
 int main(int argc, char** argv) {
     QApplication app(argc, argv);

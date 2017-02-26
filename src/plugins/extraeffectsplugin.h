@@ -3,7 +3,7 @@
 
 #include <QObject>
 
-#include "../gui/textartinterface.h"
+#include "../core/textartinterface.h"
 
 class ExtraEffectsPlugin : public QObject, public TextArtInterface {
     Q_OBJECT

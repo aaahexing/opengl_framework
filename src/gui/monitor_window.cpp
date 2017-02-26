@@ -10,7 +10,7 @@
 #include <QtGui>
 #include "camera_view_widget.h"
 #include "status_widget.h"
-#include "gl_widget.h"
+#include "opengl_widget.h"
 
 namespace monitor {
 namespace {
